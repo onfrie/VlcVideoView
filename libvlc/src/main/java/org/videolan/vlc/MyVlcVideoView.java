@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -23,6 +24,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.litao.slider.NiftySlider;
+
 import org.videolan.R;
 import org.videolan.vlc.listener.MediaListenerEvent;
 import org.videolan.vlc.util.CoreUtil;
@@ -37,11 +40,14 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function3;
 
 import static org.videolan.vlc.util.EnumConfig.PlayState.STATE_LOAD;
 import static org.videolan.vlc.util.EnumConfig.PlayState.STATE_PLAY;
@@ -53,14 +59,14 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     private VlcVideoView mVideoView;
     private RelativeLayout mRootLayout;
     private LinearLayout mBufferingLayout;
-    private RelativeLayout mVideoTopLayout;
+    private ConstraintLayout mVideoTopLayout;
     private LinearLayout mVideoBottomLayout;
     private LinearLayout mVideoSpeedLayout;
     private ImageView mVideoBack;
     private SeekBar mVideoSeekBar;
     private TextView mVideoTimeText;
     private ImageView mVideoStateImg;
-    private TextView mVideoTitleText;
+//    private TextView mVideoTitleText;
     private LinearLayout mVideoGestureLayout;
     private ImageView mVideoGestureImg;
     private TextView mVideoGestureText;
@@ -70,6 +76,10 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     private TextView mSpeedDecrease;
     private TextView mSpeedText;
     private TextView mBufferingText;
+
+    private NiftySlider seekbar3XLeft;
+    private NiftySlider seekbar3XRight;
+    private NiftySlider seekbar3Y;
 
     //播放器手势
     private GestureDetector mGestureDetector;
@@ -117,6 +127,12 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     //自定义方法订阅
     private Disposable mUpdateVideoTimeDis;
     private Disposable mControllerDis;
+
+    private int seekbar_3x_left = 50;
+    private int seekbar_3x_right = 50;
+    private int seekbar_3y = 50;
+//    private int mWidth;
+//    private int mHeight;
 
     public MyVlcVideoView(Context context) {
         super(context);
@@ -177,7 +193,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         mVideoSeekBar = findViewById(R.id.video_seekbar);
         mVideoTimeText = findViewById(R.id.video_time_text);
         mVideoStateImg = findViewById(R.id.video_state_img);
-        mVideoTitleText = findViewById(R.id.video_title_text);
+//        mVideoTitleText = findViewById(R.id.video_title_text);
         mVideoGestureLayout = findViewById(R.id.video_gesture_layout);
         mVideoGestureImg = findViewById(R.id.video_gesture_img);
         mVideoGestureText = findViewById(R.id.video_gesture_text);
@@ -188,12 +204,74 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         mSpeedText = findViewById(R.id.speed_text);
         mBufferingText = findViewById(R.id.buffering_text);
 
+        seekbar3XLeft = findViewById(R.id.seekbar_3_x_left);
+        seekbar3XRight = findViewById(R.id.seekbar_3_x_right);
+        seekbar3Y = findViewById(R.id.seekbar_3_y);
+
         mVideoBack.setOnClickListener(this);
         mVideoStateImg.setOnClickListener(this);
         mVideoFullImg.setOnClickListener(this);
         mSpeedAdd.setOnClickListener(this);
         mSpeedDecrease.setOnClickListener(this);
         mSpeedText.setOnClickListener(this);
+
+
+//        mWidth = ScreenUtils.getScreenWidth();
+//        mHeight = ScreenUtils.getScreenHeight();
+        seekbar3XLeft.addOnIntValueChangeListener(new Function3<NiftySlider, Integer, Boolean, Unit>() {
+            @Override
+            public Unit invoke(NiftySlider niftySlider, Integer value, Boolean aBoolean) {
+                seekbar_3x_left = value;
+                refresh(seekbar_3x_left, seekbar_3x_right, seekbar_3y, mVideoView.getHeight(), mVideoView.getWidth());
+                return null;
+            }
+        });
+        seekbar3XRight.addOnIntValueChangeListener(new Function3<NiftySlider, Integer, Boolean, Unit>() {
+            @Override
+            public Unit invoke(NiftySlider niftySlider, Integer value, Boolean aBoolean) {
+                seekbar_3x_right = value;
+                refresh(seekbar_3x_left, seekbar_3x_right, seekbar_3y, mVideoView.getHeight(), mVideoView.getWidth());
+                return null;
+            }
+        });
+        seekbar3Y.addOnIntValueChangeListener(new Function3<NiftySlider, Integer, Boolean, Unit>() {
+            @Override
+            public Unit invoke(NiftySlider niftySlider, Integer value, Boolean aBoolean) {
+                seekbar_3y = value;
+                refresh(seekbar_3x_left, seekbar_3x_right, seekbar_3y, mVideoView.getHeight(), mVideoView.getWidth());
+                return null;
+            }
+        });
+    }
+
+    private void refresh(int value_x_left,int value_x_right,int value_y,float bHeight,float bWidth) {
+        Matrix matrix = new Matrix();
+        float[] src = new float[]{0f, 0f, 0f, bHeight, bWidth, bHeight, bWidth, 0f};
+
+        float left_top_Height = bHeight * value_y / 100 / 2;
+        float left_bottom_Height = bHeight - bHeight * value_y / 100 / 2;
+        float right_bottom_Height = bHeight - bHeight * value_y / 100 / 2;
+        float right_top_Height = bHeight * value_y / 100 / 2;
+        if (left_bottom_Height - left_top_Height <= 0) {
+            return ;
+        }
+
+        float left_top_Width = 0 + bWidth * value_x_left / 100 / 2;
+        float left_bottom_Width = 0f;
+        float right_bottom_Width = bWidth;
+        float right_top_Width = bWidth - bWidth * value_x_right / 100 / 2;
+        if (right_top_Width - left_top_Width <= 0) {
+            return ;
+        }
+
+        float[] dst = new float[]{
+            left_top_Width, left_top_Height,
+            left_bottom_Width, left_bottom_Height,
+            right_bottom_Width, right_bottom_Height,
+            right_top_Width, right_top_Height};
+        matrix.setPolyToPoly(src, 0, dst, 0, 4);
+        mVideoView.setTransform(matrix);//将矩阵添加到textureView
+        mVideoView.postInvalidate();//重绘视图
     }
 
     /**
@@ -216,7 +294,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
 
         mIsCompleted = false;
 
-        mVideoTitleText.setText(title);
+//        mVideoTitleText.setText(title);
 
         String scheme = Uri.parse(url).getScheme();
         mIsStreaming = (("http".equalsIgnoreCase(scheme) || "rtsp".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)));

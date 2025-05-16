@@ -9,18 +9,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import org.videolan.vlc.MyVlcVideoView;
 import org.videolan.vlc.util.CoreUtil;
 import org.videolan.vlc.util.DensityUtil;
 import org.videolan.vlc.util.EnumConfig;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     RelativeLayout mVideoLayout;

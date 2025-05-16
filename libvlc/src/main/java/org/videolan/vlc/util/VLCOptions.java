@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.MainThread;
 import android.util.Log;
 
 import org.videolan.libvlc.Media;
@@ -13,6 +12,8 @@ import org.videolan.libvlc.util.HWDecoderUtil;
 import org.videolan.libvlc.util.VLCUtil;
 
 import java.util.ArrayList;
+
+import androidx.annotation.MainThread;
 
 import static android.os.Build.VERSION_CODES.KITKAT;
 

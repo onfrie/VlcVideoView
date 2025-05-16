@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -30,7 +32,8 @@
         android:text="@string/video_try_reconnect"
         android:textColor="@color/core_white"
         android:textSize="@dimen/text_size_13"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <!--缓冲显示-->
     <LinearLayout
@@ -44,7 +47,8 @@
         android:focusableInTouchMode="false"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ProgressBar
             android:id="@+id/buffering_progress"
@@ -80,7 +84,8 @@
         android:focusableInTouchMode="false"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/video_gesture_img"
@@ -110,7 +115,8 @@
         android:layout_centerVertical="true"
         android:background="@android:color/black"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/speed_add"
@@ -145,15 +151,16 @@
 
     <!--播放器顶部栏-->
     <RelativeLayout
-        android:id="@+id/video_top_layout"
+        android:id="@+id/video_top_layout2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/media_controller_top_height"
         android:layout_alignParentTop="true"
         android:background="@android:color/black"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/video_back"
+            android:id="@+id/video_back2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -166,10 +173,91 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/video_back"
+            android:layout_toRightOf="@+id/video_back2"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/video_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/black"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/video_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingStart="@dimen/dp_10"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.litao.slider.NiftySlider
+            android:id="@+id/seekbar_3_x_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="99"
+            android:visibility="gone"
+            app:haloColor="@color/ff333333"
+            app:layout_constraintTop_toTopOf="parent"
+            app:thumbColor="@color/color_067ce4"
+            app:thumbShadowColor="@color/white"
+            app:trackColor="@color/custom_progress_blue_header"
+            app:trackColorInactive="@color/custom_progress_blue_progress_half"
+            tools:visibility="visible" />
+
+        <com.litao.slider.NiftySlider
+            android:id="@+id/seekbar_3_x_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="99"
+            android:visibility="gone"
+            app:haloColor="@color/ff333333"
+            app:layout_constraintTop_toBottomOf="@+id/seekbar_3_x_left"
+            app:thumbColor="@color/color_067ce4"
+            app:thumbShadowColor="@color/white"
+            app:trackColor="@color/custom_progress_blue_header"
+            app:trackColorInactive="@color/custom_progress_blue_progress_half"
+            tools:visibility="visible" />
+
+        <com.litao.slider.NiftySlider
+            android:id="@+id/seekbar_3_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="99"
+            android:visibility="gone"
+            app:haloColor="@color/ff333333"
+            app:layout_constraintTop_toBottomOf="@+id/seekbar_3_x_right"
+            app:thumbColor="@color/color_067ce4"
+            app:thumbShadowColor="@color/white"
+            app:trackColor="@color/custom_progress_blue_header"
+            app:trackColorInactive="@color/custom_progress_blue_progress_half"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--播放器底部栏-->
     <LinearLayout
@@ -180,7 +268,8 @@
         android:background="@android:color/black"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/video_state_img"
@@ -218,7 +307,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="10dp"
             android:src="@drawable/biz_video_expand"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
 </RelativeLayout>

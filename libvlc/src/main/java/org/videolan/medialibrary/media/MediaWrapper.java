@@ -1,10 +1,10 @@
 package org.videolan.medialibrary.media;
 
+import android.annotation.Nullable;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.videolan.libvlc.Media;

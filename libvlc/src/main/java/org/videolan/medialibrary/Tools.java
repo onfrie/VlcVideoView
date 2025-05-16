@@ -2,7 +2,6 @@ package org.videolan.medialibrary;
 
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.videolan.libvlc.util.VLCUtil;
@@ -12,6 +11,8 @@ import org.videolan.medialibrary.media.MediaWrapper;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
 
 public class Tools {
 
