@@ -22,21 +22,14 @@ import org.videolan.vlc.util.CoreUtil;
 import org.videolan.vlc.util.DensityUtil;
 import org.videolan.vlc.util.EnumConfig;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.video_layout)
     RelativeLayout mVideoLayout;
-    @BindView(R.id.video_view)
     MyVlcVideoView mVideoView;
-    @BindView(R.id.v_play)
     ImageView mPlayBtn;
-    @BindView(R.id.v_cover)
     ImageView mCover;
 
-    private static final String VIDEO_URL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private static final String VIDEO_URL = "https://v-cdn.zjol.com.cn/280443.mp4";
+//    private static final String VIDEO_URL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     private static final String VIDEO_TITLE = "大雄兔";
     //以下两个常量用来保存每个视频上一次播放位置，根据项目需要去修改
     private static final String SP_FILE_NAME = "CshVlcDemo";
@@ -50,7 +43,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        mVideoLayout = findViewById(R.id.video_layout);
+        mVideoView = findViewById(R.id.video_view);
+        mPlayBtn = findViewById(R.id.v_play);
+        mCover = findViewById(R.id.v_cover);
+        mPlayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readyPlayVideo();
+            }
+        });
         initNetReceiver();
         initView();
     }
@@ -107,14 +109,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.v_play})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.v_play:
-                readyPlayVideo();
-                break;
-        }
-    }
+
 
     private void readyPlayVideo() {
         boolean isWifiConnected = CoreUtil.isWifiConnected(this);

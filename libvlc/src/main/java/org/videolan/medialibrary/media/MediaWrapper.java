@@ -8,9 +8,9 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.videolan.libvlc.Media;
-import org.videolan.libvlc.Media.Meta;
-import org.videolan.libvlc.Media.VideoTrack;
 import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.interfaces.IMedia;
+import org.videolan.libvlc.interfaces.IMedia.Meta;
 import org.videolan.libvlc.util.Extensions;
 import org.videolan.libvlc.util.VLCUtil;
 import org.videolan.medialibrary.Medialibrary;
@@ -194,7 +194,7 @@ public class MediaWrapper extends MediaLibraryItem implements Parcelable {
                     if (track == null)
                         continue;
                     if (track.type == Media.Track.Type.Video) {
-                        final Media.VideoTrack videoTrack = (VideoTrack) track;
+                        final Media.VideoTrack videoTrack = (IMedia.VideoTrack) track;
                         mType = TYPE_VIDEO;
                         mWidth = videoTrack.width;
                         mHeight = videoTrack.height;
@@ -338,7 +338,7 @@ public class MediaWrapper extends MediaLibraryItem implements Parcelable {
     public void updateMeta(MediaPlayer mediaPlayer) {
         if (!TextUtils.isEmpty(mTitle) && TextUtils.isEmpty(mDisplayTitle))
             mDisplayTitle = mTitle;
-        final Media media = mediaPlayer.getMedia();
+        final Media media = (Media) mediaPlayer.getMedia();
         if (media == null)
             return;
         updateMeta(media);

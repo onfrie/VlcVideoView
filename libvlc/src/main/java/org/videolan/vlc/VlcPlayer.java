@@ -10,10 +10,10 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.interfaces.IVLCVout;
 import org.videolan.vlc.listener.MediaListenerEvent;
 import org.videolan.vlc.listener.MediaPlayerControl;
 import org.videolan.vlc.listener.VideoSizeChange;
@@ -253,7 +253,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private void loadMedia() {
         if (isSaveState) {
             isSaveState = false;
-            Media media = mMediaPlayer.getMedia();
+            Media media = (Media) mMediaPlayer.getMedia();
             if (media != null && !media.isReleased()) {
                 canSeek = true;
                 canPause = true;
@@ -358,7 +358,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
             if (isSaveState) {
                 mMediaPlayer.pause();
             } else {
-                final Media media = mMediaPlayer.getMedia();
+                final Media media = (Media) mMediaPlayer.getMedia();
                 if (media != null) {
                     media.setEventListener(null);
                     mMediaPlayer.stop();
