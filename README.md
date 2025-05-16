@@ -4,11 +4,17 @@
 
   * [mengzhidaren/Vlc-sdk-lib]https://github.com/mengzhidaren/Vlc-sdk-lib <br>
 
+基于VlcVideoView进行的更新<br>
+
+https://github.com/jackiesea/VlcVideoView <br>
+
 提取自本人项目，使用时根据需要修改 <br>
 类MyVlcVideoView.class代码略乱，使用时建议按照MVC模式重构 <br>
 
 
-【停止更新】
+【2025年更新】
+1. 适配android14, gradle_8.2.1, 在线地址更新.
+2. VLC改为aar包依赖, 并升级VLC版本为3.4.4
 ---
 
 # 实现的功能
