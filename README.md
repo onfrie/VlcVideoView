@@ -15,6 +15,9 @@ https://github.com/jackiesea/VlcVideoView <br>
 【2025年更新】
 1. 适配android14, gradle_8.2.1, 在线地址更新.
 2. VLC改为aar包依赖, 并升级VLC版本为3.4.4
+3. 修复播放画面模式无法切换的问题
+4. 修复画面尺寸的修改方式
+5. 修复截图中播放画面下面有黑边的问题
 ---
 
 # 实现的功能
