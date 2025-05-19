@@ -16,7 +16,6 @@ import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.interfaces.IVLCVout;
 import org.videolan.vlc.listener.MediaListenerEvent;
 import org.videolan.vlc.listener.MediaPlayerControl;
-import org.videolan.vlc.listener.VideoSizeChange;
 import org.videolan.vlc.util.L;
 import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.VLCOptions;
@@ -53,6 +52,8 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     }
 
     private static MediaPlayer staticMediaPlayer;
+    private int mViewWidth;
+    private int mViewHeight;
 
     private static MediaPlayer getMediaPlayer(Context context) {
         if (isInstance) {
@@ -133,7 +134,9 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     /**
      * surface线程  可能有延迟
      */
-    public void setSurface(SurfaceTexture surface) {
+    public void setSurface(int width, int height, SurfaceTexture surface) {
+        mViewWidth = width;
+        mViewHeight = height;
         this.surface = surface;
         isAttached = true;
         if (isSufaceDelayerPlay && !isAttachedSurface) {//surface未创建时延迟加载播放
@@ -146,6 +149,13 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
                 start();
             }
         }
+    }
+
+    public void setWindowSize(int width, int height) {
+        mViewWidth = width;
+        mViewHeight = height;
+        mMediaPlayer.getVLCVout().setWindowSize(mViewWidth, mViewHeight);
+        mMediaPlayer.setVideoScale(MediaPlayer.ScaleType.SURFACE_BEST_FIT);
     }
 
     public void onSurfaceTextureDestroyed() {
@@ -241,6 +251,10 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
             mMediaPlayer.getVLCVout().attachViews(this);
             mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
             L.i(tag, "setVideoSurface   attachViews");
+
+
+        mMediaPlayer.getVLCVout().setWindowSize(mViewWidth, mViewHeight);
+        mMediaPlayer.setVideoScale(MediaPlayer.ScaleType.SURFACE_BEST_FIT);
         }
     }
 
@@ -374,7 +388,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     }
 
     public void onDestory() {
-        videoSizeChange = null;
         release();
         if (mMediaPlayer != null) {
             if (!mMediaPlayer.isReleased()) {
@@ -618,9 +631,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         this.mediaListenerEvent = mediaListenerEvent;
     }
 
-    public void setVideoSizeChange(VideoSizeChange videoSizeChange) {
-        this.videoSizeChange = videoSizeChange;
-    }
 
     public Media.VideoTrack getVideoTrack() {
         if (isPrepare())
@@ -628,22 +638,9 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         return null;
     }
 
-    private VideoSizeChange videoSizeChange;
 
     @Override
     public void onNewVideoLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
-        if (videoSizeChange != null) {
-            if (orientation == -1) {
-                Media.VideoTrack videoTrack = getVideoTrack();
-                if (videoTrack != null) {
-                    orientation = videoTrack.orientation;
-                    L.i(tag, "videoTrack=" + videoTrack.toString());
-                } else {
-                    orientation = 0;
-                }
-            }
-            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, orientation);
-        }
     }
 
     @Override

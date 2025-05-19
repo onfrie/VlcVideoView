@@ -470,6 +470,11 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
             mRootLayout.getLayoutParams().height = (int) DensityUtil.getHeightInPx(mContext);
 
             mVideoPlayCallback.onOrientationLandscape(mRootLayout.getLayoutParams().width, mRootLayout.getLayoutParams().height);
+
+
+
+
+
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             WindowManager.LayoutParams attrs = ((Activity) mContext).getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);

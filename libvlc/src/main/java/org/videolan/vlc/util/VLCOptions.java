@@ -95,7 +95,8 @@ public class VLCOptions {
 //        if (opengl == 1)
         //       options.add("--vout=gles2,none");
 //        else if (opengl == 0)
-        options.add("--vout=android_display,none");
+        //这个参数会导致画面播放模式会失效
+//        options.add("--vout=android_display,none");
 
         /* Configure keystore */
 //        options.add("--keystore");

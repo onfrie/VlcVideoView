@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MrCSH_VlcVideoView.iml" filepath="$PROJECT_DIR$/MrCSH_VlcVideoView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libvlc/libvlc.iml" filepath="$PROJECT_DIR$/libvlc/libvlc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VlcVideoView.iml" filepath="$PROJECT_DIR$/.idea/modules/VlcVideoView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VlcVideoView.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.iml" filepath="$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/libvlc/VlcVideoView.libvlc.unitTest.iml" />
     </modules>
   </component>
 </project>

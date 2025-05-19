@@ -1,7 +1,6 @@
 package org.videolan.vlc;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.view.TextureView;
@@ -10,10 +9,9 @@ import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.vlc.listener.MediaListenerEvent;
 import org.videolan.vlc.listener.MediaPlayerControl;
-import org.videolan.vlc.listener.VideoSizeChange;
 import org.videolan.vlc.util.L;
 
-public class VlcVideoView extends TextureView implements MediaPlayerControl, TextureView.SurfaceTextureListener, VideoSizeChange {
+public class VlcVideoView extends TextureView implements MediaPlayerControl, TextureView.SurfaceTextureListener {
     private VlcPlayer videoMediaLogic;
     private PlayStateImpl mPlayStateCallback;
     private final String tag = "VideoView";
@@ -62,7 +60,6 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     private void init(Context context) {
         videoMediaLogic = new VlcPlayer(context);
         videoMediaLogic.setPlayerStateCallback(mPlayerStateCallback);
-        videoMediaLogic.setVideoSizeChange(this);
         setSurfaceTextureListener(this);
     }
 
@@ -171,18 +168,13 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         L.i(tag, "onSurfaceTextureAvailable");
-        videoMediaLogic.setSurface(surface);
+        videoMediaLogic.setSurface(width, height, surface);
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         L.i(tag, "onSurfaceTextureSizeChanged");
-        post(new Runnable() {
-            @Override
-            public void run() {
-                adjustAspectRatio(mVideoWidth, mVideoHeight, rotation);
-            }
-        });
+        videoMediaLogic.setWindowSize(width, height);
     }
 
     @Override
@@ -218,76 +210,11 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         setKeepScreenOn(false);
     }
 
-    private void adjustAspectRatio(int videoWidth, int videoHeight, int rotation) {
-        if (videoWidth * videoHeight == 0) {
-            return;
-        }
-        int viewWidth = getWidth();
-        int viewHeight = getHeight();
-        double videoRatio = (double) viewWidth / (double) viewHeight;//显示比例
-        double aspectRatio = (double) videoWidth / (double) videoHeight;//视频比例
-        int newWidth, newHeight;
-        if (videoWidth > videoHeight) {//正常比例16：9
-            if (videoRatio > aspectRatio) {//16:9>16:10
-                newWidth = (int) (viewHeight * aspectRatio);
-                newHeight = viewHeight;
-            } else {//16:9<16:8
-                newWidth = viewWidth;
-                newHeight = (int) (viewWidth / aspectRatio);
-            }
-        } else {//非正常可能是 90度
-            //16:9>1:9
-            newWidth = (int) (viewHeight * aspectRatio);
-            newHeight = viewHeight;
-        }
-        float xoff = (viewWidth - newWidth) / 2f;
-        float yoff = (viewHeight - newHeight) / 2f;
-        Matrix txform = new Matrix();
-        getTransform(txform);
-        txform.setScale((float) newWidth / viewWidth, (float) newHeight
-                / viewHeight);
-        // txform.postRotate(10); // just for fun
-        txform.postTranslate(xoff, yoff);
-        setTransform(txform);
-        if (rotation == 180) {
-            setRotation(180);
-        } else {
-            setRotation(0);
-        }
-    }
-
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
-            adjustAspectRatio(mVideoWidth, mVideoHeight, 0);
-        }
     }
 
-    private int mVideoWidth;
-    private int mVideoHeight;
-
-    public int getVideoRotation() {
-        return rotation;
-    }
-
-    private int rotation = 0;
-
-    @Override
-    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int orientation) {
-        L.i(tag, "onVideoSizeChanged   video=" + width + "x" + width + " visible="
-                + visibleWidth + "x" + visibleHeight + "   orientation=" + orientation);
-        if (width * height == 0) return;
-        this.mVideoWidth = visibleWidth;
-        this.mVideoHeight = visibleHeight;
-        this.rotation = orientation;
-        post(new Runnable() {
-            @Override
-            public void run() {
-                adjustAspectRatio(mVideoWidth, mVideoHeight, rotation);
-            }
-        });
-    }
 
     VlcPlayer.PlayerStateImpl mPlayerStateCallback = new VlcPlayer.PlayerStateImpl() {
         @Override
